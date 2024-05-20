@@ -1,0 +1,89 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_book_2/models/book.dart';
+import 'package:flutter_book_2/screens/home/pages/book_details.dart';
+import 'package:flutter_book_2/themes.dart';
+
+class TrendingBook extends StatelessWidget {
+  const TrendingBook({
+    Key? key,
+    required this.info,
+  }) : super(key: key);
+
+  final Book info;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, BookDetail.nameRoute, arguments: info);
+          },
+          child: Hero(
+            tag: info.thumbnail,
+            child: Container(
+              height: 160,
+              width: 110,
+              margin: const EdgeInsets.only(top: 12, right: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  image: NetworkImage(info.thumbnail),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: 110,
+          child: Text(
+            info.authors,
+            style: mediumText12.copyWith(color: greyColor),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          width: 110,
+          child: Text(
+            info.title,
+            style: semiBoldText14.copyWith(color: blackColor),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TrendingBooksGrid extends StatelessWidget {
+  final List<Book> books;
+
+  const TrendingBooksGrid({
+    Key? key,
+    required this.books,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics:
+          const NeverScrollableScrollPhysics(), // Disable GridView's own scrolling
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // Two columns
+        childAspectRatio: 0.7, // Adjust as needed
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: books.length,
+      itemBuilder: (context, index) {
+        return TrendingBook(info: books[index]);
+      },
+    );
+  }
+}

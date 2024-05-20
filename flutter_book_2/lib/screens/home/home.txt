@@ -1,0 +1,54 @@
+// Widget categories(int index) {
+    //   return InkWell(
+    //     onTap: () {
+    //       setState(() {
+    //         _isSelected = index;
+    //       });
+    //     },
+    //     child: Container(
+    //       margin: const EdgeInsets.only(top: 30, right: 12),
+    //       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+    //       decoration: BoxDecoration(
+    //         color: _isSelected == index ? greenColor : transParentColor,
+    //         borderRadius: BorderRadius.circular(6),
+    //       ),
+    //       child: Text(
+    //         _categories[index],
+    //         style: semiBoldText14.copyWith(
+    //             color: _isSelected == index ? whiteColor : greyColor),
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    // Widget listCategories() {
+    //   return SingleChildScrollView(
+    //     padding: const EdgeInsets.only(left: 30),
+    //     scrollDirection: Axis.horizontal,
+    //     child: Row(
+    //       children: _categories
+    //           .asMap()
+    //           .entries
+    //           .map((MapEntry map) => categories(map.key))
+    //           .toList(),
+    //     ),
+    //   );
+    // }
+
+    // Widget trendingBook() {
+    //   return SingleChildScrollView(
+    //     scrollDirection: Axis.horizontal,
+    //     padding: const EdgeInsets.symmetric(horizontal: 30),
+    //     child: Row(
+    //       children: bookLists
+    //           .asMap()
+    //           .entries
+    //           .map(
+    //             (MapEntry map) => TrendingBook(
+    //               info: bookLists[map.key],
+    //             ),
+    //           )
+    //           .toList(),
+    //     ),
+    //   );
+    // }
