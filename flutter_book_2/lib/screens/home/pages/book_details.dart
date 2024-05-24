@@ -1,10 +1,18 @@
-import 'package:flutter_book_2/models/book.dart';
-import 'package:flutter_book_2/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_book_2/database/db_helper.dart';
+import 'package:flutter_book_2/models/book.dart';
+import 'package:flutter_book_2/models/book_provider.dart';
+import 'package:flutter_book_2/themes.dart';
+import 'package:provider/provider.dart';
 
 class BookDetail extends StatelessWidget {
   static const nameRoute = '/bookDetails';
   const BookDetail({Key? key}) : super(key: key);
+
+  Future<void> saveBook(Book book) async {
+    final dbHelper = DatabaseHelper.instance;
+    await dbHelper.create(book);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +126,33 @@ class BookDetail extends StatelessWidget {
           width: 50,
           padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(color: greenColor, shape: BoxShape.circle),
-          child: Image.asset('assets/icons/icon-save.png'),
+          child: GestureDetector(
+            onTap: () {
+              final bookProvider =
+                  Provider.of<BookProvider>(context, listen: false);
+              bookProvider.addBook(
+                Book(
+                  id: data.id,
+                  thumbnail: data.thumbnail,
+                  title: data.title,
+                  authors: data.authors,
+                  description: data.description, // Update as per your data
+                  rating: data.rating, // Update as per your data
+                  pageCount: data.pageCount, // Update as per your data
+                  language: data.language, // Update as per your data
+                ),
+              );
+            },
+            child: Image.asset('assets/icons/icon-save.png'),
+            // child: Container(
+            //   height: 50,
+            //   width: 50,
+            //   padding: const EdgeInsets.symmetric(vertical: 16),
+            //   decoration:
+            //       BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+            //   child: Icon(Icons.save, color: Colors.white),
+            // ),
+          ),
         ),
       );
     }

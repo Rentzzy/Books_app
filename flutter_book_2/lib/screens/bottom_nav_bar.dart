@@ -17,7 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final _screens = [
     const HomePage(),
-    const SavePage(),
+    BookmarkPage(),
     const UserPage(),
   ];
   @override

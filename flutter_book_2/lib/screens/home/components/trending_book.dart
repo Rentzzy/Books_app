@@ -23,9 +23,9 @@ class TrendingBook extends StatelessWidget {
           child: Hero(
             tag: info.thumbnail,
             child: Container(
-              height: 160,
-              width: 110,
-              margin: const EdgeInsets.only(top: 12, right: 20),
+              height: 180,
+              width: 160,
+              margin: const EdgeInsets.only(top: 12, right: 20, left: 30),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
@@ -38,21 +38,29 @@ class TrendingBook extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         SizedBox(
-          width: 110,
-          child: Text(
-            info.authors,
-            style: mediumText12.copyWith(color: greyColor),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          width: 160,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: Text(
+              info.authors,
+              style: mediumText12.copyWith(color: greyColor),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
         SizedBox(
-          width: 110,
-          child: Text(
-            info.title,
-            style: semiBoldText14.copyWith(color: blackColor),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          width: 160,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 30,
+            ),
+            child: Text(
+              info.title,
+              style: semiBoldText14.copyWith(color: blackColor),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
       ],

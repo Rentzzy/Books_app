@@ -1,4 +1,5 @@
 class Book {
+  final String id;
   final String thumbnail;
   final String title;
   final String authors;
@@ -8,6 +9,7 @@ class Book {
   final String language;
 
   Book({
+    required this.id,
     required this.thumbnail,
     required this.title,
     required this.authors,
@@ -19,6 +21,7 @@ class Book {
 
   factory Book.fromJson(Map<String, dynamic> json) {
     return Book(
+      id: json['id'],
       thumbnail: json['volumeInfo']['imageLinks'] != null
           ? json['volumeInfo']['imageLinks']['thumbnail']
           : 'https://via.placeholder.com/150',
@@ -26,8 +29,7 @@ class Book {
       authors: json['volumeInfo']['authors'] != null
           ? (json['volumeInfo']['authors'] as List).join(', ')
           : 'No authors available',
-      description:
-          json['volumeInfo']['description'] ?? 'No description available',
+      description: json['volumeInfo']['description'] ?? 'No description available',
       rating: json['volumeInfo']['averageRating'] != null
           ? json['volumeInfo']['averageRating'].toDouble()
           : 0.0,
@@ -35,46 +37,30 @@ class Book {
       language: json['volumeInfo']['language'] ?? 'N/A',
     );
   }
+
+  factory Book.fromMap(Map<String, dynamic> map) {
+    return Book(
+      id: map['id'],
+      thumbnail: map['thumbnail'],
+      title: map['title'],
+      authors: map['authors'],
+      description: map['description'],
+      rating: map['rating'],
+      pageCount: map['pageCount'],
+      language: map['language'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'thumbnail': thumbnail,
+      'title': title,
+      'authors': authors,
+      'description': description,
+      'rating': rating,
+      'pageCount': pageCount,
+      'language': language,
+    };
+  }
 }
-
-
-// Future<List<Book>> searchBooks(String query) async {
-//   final api = GoogleBooksApi();
-//   final response = await api.searchBooks(query);
-//   final books = response.items?.map((item) => Book.fromJson(item)).toList();
-//   return books ?? [];
-// }
-
-
-
-// class BookList {
-//   String imageUrl;
-//   String writers;
-//   String title;
-
-//   BookList(
-//       {required this.imageUrl, required this.writers, required this.title});
-// }
-
-// List<BookList> bookLists = [
-//   BookList(
-//     imageUrl: 'assets/images/trending_book_1.png',
-//     writers: 'Guy Kawasaki',
-//     title: 'Enchantment',
-//   ),
-//   BookList(
-//     imageUrl: 'assets/images/trending_book_2.png',
-//     writers: 'Aaron Mahnke',
-//     title: 'Lore',
-//   ),
-//   BookList(
-//     imageUrl: 'assets/images/trending_book_3.png',
-//     writers: 'Spencer Johnson, M.D',
-//     title: 'Who Moved My Cheese',
-//   ),
-//   BookList(
-//     imageUrl: 'assets/images/recentbook_1.png',
-//     writers: 'Guy',
-//     title: 'Ent',
-//   ),
-// ];

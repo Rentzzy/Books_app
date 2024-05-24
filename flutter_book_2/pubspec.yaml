@@ -39,6 +39,9 @@ dependencies:
   percent_indicator: ^4.2.3
   google_books_api: ^1.0.0
   http: ^0.13.4
+  sqflite: ^2.0.0+4
+  path: ^1.8.0
+  provider: ^6.0.0
 
 
 dev_dependencies:

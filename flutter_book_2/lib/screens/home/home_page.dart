@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchBooks() async {
     final response = await http.get(Uri.parse(
-        'https://www.googleapis.com/books/v1/volumes?q=flutter&maxResults=10'));
+        'https://www.googleapis.com/books/v1/volumes?q=flutter&maxResults=20'));
 
     if (response.statusCode == 200) {
       final List<dynamic> items = json.decode(response.body)['items'];
