@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_2/screens/home/pages/book_details.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_book_2/models/book_provider.dart';
 
@@ -24,6 +25,10 @@ class BookmarkPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final book = bookProvider.books[index];
                     return ListTile(
+                      onTap: () {
+                        Navigator.pushNamed(context, BookDetail.nameRoute,
+                            arguments: book);
+                      },
                       leading: Image.network(book.thumbnail),
                       title: Text(book.title, overflow: TextOverflow.ellipsis),
                       subtitle: Text(book.authors),

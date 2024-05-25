@@ -20,18 +20,15 @@ class TrendingBook extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(context, BookDetail.nameRoute, arguments: info);
           },
-          child: Hero(
-            tag: info.thumbnail,
-            child: Container(
-              height: 180,
-              width: 160,
-              margin: const EdgeInsets.only(top: 12, right: 20, left: 30),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage(info.thumbnail),
-                  fit: BoxFit.cover,
-                ),
+          child: Container(
+            height: 180,
+            width: 160,
+            margin: const EdgeInsets.only(top: 12, right: 20, left: 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: NetworkImage(info.thumbnail),
+                fit: BoxFit.cover,
               ),
             ),
           ),

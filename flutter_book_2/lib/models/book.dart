@@ -7,6 +7,8 @@ class Book {
   final double rating;
   final int pageCount;
   final String language;
+  final String previewLink;
+  final String accessViewStatus;
 
   Book({
     required this.id,
@@ -17,6 +19,8 @@ class Book {
     required this.rating,
     required this.pageCount,
     required this.language,
+    required this.previewLink,
+    required this.accessViewStatus,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -29,12 +33,15 @@ class Book {
       authors: json['volumeInfo']['authors'] != null
           ? (json['volumeInfo']['authors'] as List).join(', ')
           : 'No authors available',
-      description: json['volumeInfo']['description'] ?? 'No description available',
+      description:
+          json['volumeInfo']['description'] ?? 'No description available',
       rating: json['volumeInfo']['averageRating'] != null
           ? json['volumeInfo']['averageRating'].toDouble()
           : 0.0,
       pageCount: json['volumeInfo']['pageCount'] ?? 0,
       language: json['volumeInfo']['language'] ?? 'N/A',
+      previewLink: json['volumeInfo']['previewLink'] ?? '',
+      accessViewStatus: json['accessInfo']['accessViewStatus'] ?? '',
     );
   }
 
@@ -48,6 +55,8 @@ class Book {
       rating: map['rating'],
       pageCount: map['pageCount'],
       language: map['language'],
+      previewLink: map['previewLink'],
+      accessViewStatus: map['accessViewStatus'],
     );
   }
 
@@ -61,6 +70,8 @@ class Book {
       'rating': rating,
       'pageCount': pageCount,
       'language': language,
+      'previewLink': previewLink,
+      'accessViewStatus': accessViewStatus,
     };
   }
 }

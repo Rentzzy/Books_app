@@ -1,9 +1,10 @@
-import 'dart:convert';
+// lib/screens/home/home_page.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_book_2/API/api_service.dart';
 import 'package:flutter_book_2/models/book.dart';
 import 'package:flutter_book_2/screens/home/components/recent_book.dart';
 import 'package:flutter_book_2/screens/home/components/trending_book.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_book_2/screens/home/pages/search_page.dart';
 import 'package:flutter_book_2/themes.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,8 +16,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ApiService _apiService = ApiService();
   List<Book> _bookLists = [];
   bool _isLoading = true;
+  final TextEditingController _searchController = TextEditingController();
+
+  final List<String> _categories = [
+    'All Books',
+    'Comic',
+    'Novel',
+    'Manga',
+    'Fantasy',
+    'Horor',
+    'Darama',
+  ];
+
+  int _isSelected = 0;
 
   @override
   void initState() {
@@ -25,17 +40,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchBooks() async {
-    final response = await http.get(Uri.parse(
-        'https://www.googleapis.com/books/v1/volumes?q=flutter&maxResults=20'));
+    setState(() {
+      _isLoading = true;
+    });
 
-    if (response.statusCode == 200) {
-      final List<dynamic> items = json.decode(response.body)['items'];
+    try {
+      List<Book> books;
+      if (_isSelected == 0) {
+        books = await _apiService.fetchBooks();
+      } else {
+        books =
+            await _apiService.fetchBooksByCategory(_categories[_isSelected]);
+      }
       setState(() {
-        _bookLists = items.map((item) => Book.fromJson(item)).toList();
+        _bookLists = books;
         _isLoading = false;
       });
-    } else {
-      throw Exception('Failed to load books');
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print(e);
+    }
+  }
+
+  void _onSearch() {
+    final query = _searchController.text.trim();
+    if (query.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SearchPage(query: query),
+        ),
+      );
     }
   }
 
@@ -84,6 +121,7 @@ class _HomePageState extends State<HomePage> {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 30),
         child: TextField(
+          controller: _searchController,
           decoration: InputDecoration(
             hintText: 'Find Your Favorite Book',
             hintStyle: mediumText12.copyWith(color: greyColor),
@@ -98,7 +136,7 @@ class _HomePageState extends State<HomePage> {
             isCollapsed: true,
             contentPadding: const EdgeInsets.all(18),
             suffixIcon: InkWell(
-              onTap: () {},
+              onTap: _onSearch,
               child: Container(
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
@@ -138,6 +176,44 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    Widget categories(int index) {
+      return InkWell(
+        onTap: () {
+          setState(() {
+            _isSelected = index;
+          });
+          _fetchBooks();
+        },
+        child: Container(
+          margin: const EdgeInsets.only(top: 30, right: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          decoration: BoxDecoration(
+            color: _isSelected == index ? greenColor : transParentColor,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            _categories[index],
+            style: semiBoldText14.copyWith(
+                color: _isSelected == index ? whiteColor : greyColor),
+          ),
+        ),
+      );
+    }
+
+    Widget listCategories() {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.only(left: 30),
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: _categories
+              .asMap()
+              .entries
+              .map((MapEntry map) => categories(map.key))
+              .toList(),
+        ),
+      );
+    }
+
     Widget trendingBookGrid() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -169,19 +245,20 @@ class _HomePageState extends State<HomePage> {
                 header(),
                 const SizedBox(height: 30),
                 searchField(),
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Text(
-                    'Recent Book',
-                    style: semiBoldText16.copyWith(color: blackColor),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                recentBook(),
+                // const SizedBox(height: 30),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 30),
+                //   child: Text(
+                //     'Recent Book',
+                //     style: semiBoldText16.copyWith(color: blackColor),
+                //   ),
+                // ),
+                // const SizedBox(height: 12),
+                // recentBook(),
               ],
             ),
           ),
+          listCategories(),
           Padding(
             padding: const EdgeInsets.only(left: 30, top: 30),
             child: Text(

@@ -4,6 +4,7 @@ import 'package:flutter_book_2/models/book.dart';
 import 'package:flutter_book_2/models/book_provider.dart';
 import 'package:flutter_book_2/themes.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookDetail extends StatelessWidget {
   static const nameRoute = '/bookDetails';
@@ -12,6 +13,13 @@ class BookDetail extends StatelessWidget {
   Future<void> saveBook(Book book) async {
     final dbHelper = DatabaseHelper.instance;
     await dbHelper.create(book);
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -136,14 +144,16 @@ class BookDetail extends StatelessWidget {
                   thumbnail: data.thumbnail,
                   title: data.title,
                   authors: data.authors,
-                  description: data.description, // Update as per your data
-                  rating: data.rating, // Update as per your data
-                  pageCount: data.pageCount, // Update as per your data
-                  language: data.language, // Update as per your data
+                  description: data.description,
+                  rating: data.rating,
+                  pageCount: data.pageCount,
+                  language: data.language,
+                  previewLink: data.previewLink,
+                  accessViewStatus: data.accessViewStatus,
                 ),
               );
             },
-            child: Image.asset('assets/icons/icon-save.png'),
+            child: Image.asset('assets/icons/icon-save-nav.png'),
             // child: Container(
             //   height: 50,
             //   width: 50,
@@ -163,7 +173,9 @@ class BookDetail extends StatelessWidget {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 30),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            _launchURL(data.previewLink);
+          },
           style: TextButton.styleFrom(
             backgroundColor: greenColor,
             shape: RoundedRectangleBorder(
@@ -212,7 +224,7 @@ class BookDetail extends StatelessWidget {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  'Free Access',
+                  data.accessViewStatus,
                   style: mediumText14.copyWith(color: greenColor),
                 ),
               ],

@@ -38,7 +38,9 @@ CREATE TABLE books (
   description $textType,
   rating $doubleType,
   pageCount $intType,
-  language $textType
+  language $textType,
+  previewLink $textType,
+  accessViewStatus $textType
   )
 ''');
   }
@@ -55,7 +57,7 @@ CREATE TABLE books (
   Future<List<Book>> readAllBooks() async {
     final db = await instance.database;
 
-    final orderBy = 'title ASC';
+    final orderBy = 'id ASC';
     final result = await db.query('books', orderBy: orderBy);
 
     return result.map((json) => Book.fromMap(json)).toList();
